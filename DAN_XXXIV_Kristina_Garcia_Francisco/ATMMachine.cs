@@ -29,7 +29,7 @@ namespace DAN_XXXIV_Kristina_Garcia_Francisco
         /// the amount of withdraws equals the amount of people attempting it
         /// </summary>
         public void ATMWithdraw()
-        { 
+        {
             lock (l)
             {
                 Random rnd = new Random();
@@ -38,23 +38,17 @@ namespace DAN_XXXIV_Kristina_Garcia_Francisco
                 // To make e sure its always a random number
                 Thread.Sleep(15);
 
-                // Amount of people withdrawing money from atm
-                for (int i = 0; i < AllATMUsers.Count; i++)
+                // Checks if the amount is available in the bank and reduces its total value
+                if (withdrawValue <= totalBankMoney)
                 {
-                    // Checks if the amount is available in the bank and reduces its total value
-                    if (withdrawValue <= totalBankMoney)
-                    {
-                        totalBankMoney = totalBankMoney - withdrawValue;
-                        Console.WriteLine("{0} withdrew {1} RSD. Current money state in bank: {2}",
-                           Thread.CurrentThread.Name, withdrawValue, totalBankMoney);
-                        break;
-                    }
-                    else if (withdrawValue > totalBankMoney)
-                    {
-                        Console.WriteLine("{0} tried to withdraw {1} RSD." +
-                            " Transaction failed due to lack of money in Bank.", Thread.CurrentThread.Name, withdrawValue);
-                        break;
-                    }
+                    totalBankMoney = totalBankMoney - withdrawValue;
+                    Console.WriteLine("{0} withdrew {1} RSD. Current money state in bank: {2}",
+                       Thread.CurrentThread.Name, withdrawValue, totalBankMoney);
+                }
+                else
+                {
+                    Console.WriteLine("{0} tried to withdraw {1} RSD." +
+                        " Transaction failed due to lack of money in Bank.", Thread.CurrentThread.Name, withdrawValue);
                 }
             }
         }
@@ -97,6 +91,11 @@ namespace DAN_XXXIV_Kristina_Garcia_Francisco
             foreach (var item in AllATMUsers)
             {
                 item.Start();
+            }
+
+            if (AllATMUsers.Count == 0)
+            {
+                Console.WriteLine("No users are currently using the ATM");
             }
         }
     }
