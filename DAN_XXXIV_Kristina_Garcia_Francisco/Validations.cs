@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+
 namespace DAN_XXXIV_Kristina_Garcia_Francisco
 {
     /// <summary>

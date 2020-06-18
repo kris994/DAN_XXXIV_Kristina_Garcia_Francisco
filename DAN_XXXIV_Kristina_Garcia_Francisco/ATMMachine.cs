@@ -1,13 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace DAN_XXXIV_Kristina_Garcia_Francisco
 {
+    /// <summary>
+    /// Represents an atm bank machine functions
+    /// </summary>
     class ATMMachine
     {
-        public static int money = 10000;
+        #region Properties
+        /// <summary>
+        /// Fixed value in the bank
+        /// </summary>
+        public int money = 10000;
+        /// <summary>
+        /// The lock object
+        /// </summary>
         private readonly object l = new object();
+        /// <summary>
+        /// List of all Users that are attempting to withdraw money from ATM
+        /// </summary>
+        public List<Thread> AllATMUsers = new List<Thread>();
+        #endregion
 
+        /// <summary>
+        /// Withdraws the money from the bank using an atm, 
+        /// the amount of withdraws equals the amount of people attempting it
+        /// </summary>
         public void ATMWithdraw()
         {           
             int withdrawValue = 0;
@@ -20,8 +40,10 @@ namespace DAN_XXXIV_Kristina_Garcia_Francisco
                 // To make e sure its always a random number
                 Thread.Sleep(15);
 
-                for (int i = 0; i < Program.AllATMUsers.Count; i++)
+                // Amount of people qithdrawing money from atm
+                for (int i = 0; i < AllATMUsers.Count; i++)
                 {
+                    // Checks if the amount is available in the bank
                     if (withdrawValue <= money)
                     {
                         money = money - withdrawValue;
@@ -36,14 +58,15 @@ namespace DAN_XXXIV_Kristina_Garcia_Francisco
                         break;
                     }
                 }
-
             }
         }
-
+        
+        /// <summary>
+        /// Creates threads for the total amount of people withdrawing
+        /// </summary>
         public void Bank()
         {
             Validations val = new Validations();
-            Random rnd = new Random();
 
             Console.Write("Please enter the number of users for ATM 1: ");
             int userNumOne = val.ValidPositiveNumber();
@@ -59,7 +82,7 @@ namespace DAN_XXXIV_Kristina_Garcia_Francisco
                     Name = "User " + i + " from ATM 1"
                 };
 
-                Program.AllATMUsers.Add(thread);
+                AllATMUsers.Add(thread);
             }
 
             for (int i = 1; i < userNumTwo + 1; i++)
@@ -69,10 +92,11 @@ namespace DAN_XXXIV_Kristina_Garcia_Francisco
                     Name = "User " + i + " from ATM 2"
                 };
 
-                Program.AllATMUsers.Add(thread);
+                AllATMUsers.Add(thread);
             }
 
-            foreach (var item in Program.AllATMUsers)
+            // Start all threads at the same time from the list
+            foreach (var item in AllATMUsers)
             {
                 item.Start();
             }

@@ -1,13 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
 
 namespace DAN_XXXIV_Kristina_Garcia_Francisco
 {
+    /// <summary>
+    /// The main program class
+    /// </summary>
     class Program
     {
-        public static List<Thread> AllATMUsers = new List<Thread>();
-
+        /// <summary>
+        /// The main method
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             ATMMachine atm = new ATMMachine();
