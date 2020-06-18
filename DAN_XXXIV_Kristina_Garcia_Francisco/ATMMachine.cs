@@ -13,7 +13,7 @@ namespace DAN_XXXIV_Kristina_Garcia_Francisco
         /// <summary>
         /// Fixed value in the bank
         /// </summary>
-        public int money = 10000;
+        public int totalBankMoney = 10000;
         /// <summary>
         /// The lock object
         /// </summary>
@@ -29,29 +29,27 @@ namespace DAN_XXXIV_Kristina_Garcia_Francisco
         /// the amount of withdraws equals the amount of people attempting it
         /// </summary>
         public void ATMWithdraw()
-        {           
-            int withdrawValue = 0;
-            
+        { 
             lock (l)
             {
-                Random rnd = new Random();                
-                withdrawValue = rnd.Next(100, 10001);
+                Random rnd = new Random();
+                int withdrawValue = rnd.Next(100, 10001);
 
                 // To make e sure its always a random number
                 Thread.Sleep(15);
 
-                // Amount of people qithdrawing money from atm
+                // Amount of people withdrawing money from atm
                 for (int i = 0; i < AllATMUsers.Count; i++)
                 {
-                    // Checks if the amount is available in the bank
-                    if (withdrawValue <= money)
+                    // Checks if the amount is available in the bank and reduces its total value
+                    if (withdrawValue <= totalBankMoney)
                     {
-                        money = money - withdrawValue;
-                        Console.WriteLine("{0} withdraw {1} RSD. Current money state in bank: {2}",
-                           Thread.CurrentThread.Name, withdrawValue, money);
+                        totalBankMoney = totalBankMoney - withdrawValue;
+                        Console.WriteLine("{0} withdrew {1} RSD. Current money state in bank: {2}",
+                           Thread.CurrentThread.Name, withdrawValue, totalBankMoney);
                         break;
                     }
-                    else if (withdrawValue > money)
+                    else if (withdrawValue > totalBankMoney)
                     {
                         Console.WriteLine("{0} tried to withdraw {1} RSD." +
                             " Transaction failed due to lack of money in Bank.", Thread.CurrentThread.Name, withdrawValue);
